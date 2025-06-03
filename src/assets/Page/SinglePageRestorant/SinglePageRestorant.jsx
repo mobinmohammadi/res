@@ -12,8 +12,6 @@ import SinglePageRestorantMenu from "./../../Components//SinglePageRestorant/Sin
 import RestorantsData from "../../../../RestorantsData.json";
 import { CartProvider } from "../../Components/Context/Context";
 import FoodBoxes from "../../Components/FoodBoxes/FoodBoxes";
-import categuryTitleFoods from "./../../../Data.js";
-import SliderTitleFoods from "../../Components/SinglePageRestorant/SliderTitleFoods/SliderTitleFoods";
 
 export default function SinglePageRestorant() {
   // const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -117,30 +115,7 @@ export default function SinglePageRestorant() {
     setArrayUserBasket(updatedLocalStorageAfterDelete);
   };
   // ====================================================================
-  // ====================================================================
-  const [mainCategury, setMainCategury] = useState("ساندویچ حرفه ای");
 
-  // ====================================================================
-  // ========================================================= ===========
-
-  const [isActiveCateguryFoods, setIsActiveCateguryFoods] = useState(false);
-
-  const wrapperCateguryFoods = useRef(null);
-
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 450) {
-      setIsActiveCateguryFoods(true)
-    }
-    else{
-      setIsActiveCateguryFoods(false)
-    }
-    // else {
-    //   console.log("");
-
-    // }
-  });
-
-  // ====================================================================
 
 
 
@@ -190,25 +165,7 @@ export default function SinglePageRestorant() {
         </div>
       </div>
 
-      <div
-        className={` ${
-          isActiveCateguryFoods ? "opacity-100 visible z-20  top-12 sm:top-14 fixed flex transition-all" : "opacity-0 invisible hidden "
-        } w-full shadow-2xs`}
-      >
-        <div className=" flex w-full border-solid shadow-2xl    items-center justify-center pt-3 bg-white">
-          <div className="  mx-auto flex items-center  overflow-x-scroll hide-scrollbar justify-center gap-14">
-            {categuryTitleFoods.categuryTitleFoods.map((item) => (
-              <div className="">
-                <SliderTitleFoods
-                  mainCategury={mainCategury}
-                  setMainCategury={setMainCategury}
-                  item={item}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+     
 
       {statusMenuShow == "resturants-comments" ? (
         <CommentsSections

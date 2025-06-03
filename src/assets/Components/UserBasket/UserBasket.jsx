@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./UserBasket.css";
 import BoxUserBasket from "./BoxUserBasket/BoxUserBasket";
+import BoxUserBasketForLocalStorage from "./BoxUserBasketForLocalStorage/BoxUserBasketForLocalStorage";
 export default function UserBasket({
   deleteFoodInUserBasket,
   fainalyAllPriceFoods,
@@ -26,6 +27,46 @@ export default function UserBasket({
     styleWrapperUserBasket();
   }, [arrayUserBasket]);
 
+  const [localStorageData, setLocalStorageData] = useState([]);
+
+  useEffect(() => {
+    const storedLocal = JSON.parse(localStorage.getItem("basket")) || [];
+    if (storedLocal) {
+      setLocalStorageData(storedLocal);
+    }
+  }, []);
+
+  // =====================    All Price In Local Storage ==================
+
+  const [dataPriceLocalStorage, setDataPriceLocalStorage] = useState(0);
+
+  useEffect(() => {
+    const allPriceInLocalStorage = localStorageData?.map(
+      (item) => item.price * (item.count || 1)
+    );
+    console.log(allPriceInLocalStorage);
+    let resultAllPriceFoodsInLocalStorage = allPriceInLocalStorage.reduce(
+      (acc, num) => acc + num,
+      0
+    );
+    setDataPriceLocalStorage(resultAllPriceFoodsInLocalStorage);
+  }, []);
+  console.log(dataPriceLocalStorage);
+
+  // ======================================================================
+
+  // ============     Canditiondal Rendering For Basket ====================
+
+  const basketToRender =
+    arrayUserBasket?.length > 0
+      ? arrayUserBasket
+      : localStorageData?.length > 0
+      ? localStorageData
+      : [];
+  console.log("basketToRender ===> ", basketToRender);
+
+  // =======================================================================
+
   return (
     <>
       <div
@@ -44,11 +85,58 @@ export default function UserBasket({
             </svg>
           </div>
           <div ref={wrapperUserBasket} className="flex flex-col mt-3 gap-3">
-            {arrayUserBasket?.length ? (
+            {arrayUserBasket?.length || localStorageData.length ? (
               <span className="bg-amber-500 text-white text-sm w-full block text-center pt-2 pb-2 rounded-sm mt-2">
-                {arrayUserBasket?.length} عدد غذا در لیست خرید شما موجود است
+                {arrayUserBasket?.length || localStorageData.length} عدد غذا در
+                لیست خرید شما موجود است
               </span>
             ) : null}
+            {basketToRender?.length > 0 ? (
+              localStorageData?.length > 0 ? (
+                localStorageData.map((foods) => (
+                  <BoxUserBasketForLocalStorage
+                    deleteFoodInUserBasket={deleteFoodInUserBasket}
+                    setIdProductInBasket={setIdProductInBasket}
+                    setArrayUserBasket={setArrayUserBasket}
+                    localStorageData={localStorageData}
+                    foods={foods}
+                    arrayUserBasket={arrayUserBasket}
+                    addToBasketUser={addToBasketUser}
+                    menu={arrayUserBasket}
+                  />
+                ))
+              ) : (
+                arrayUserBasket?.map((item) => (
+                  <BoxUserBasket
+                    arrayUserBasket={arrayUserBasket}
+                    setArrayUserBasket={setArrayUserBasket}
+                    addToBasketUser={addToBasketUser}
+                    deleteFoodInUserBasket={deleteFoodInUserBasket}
+                    item={item}
+                    menu={arrayUserBasket}
+                    setIdProductInBasket={setIdProductInBasket}
+                  />
+                ))
+              )
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full">
+                <img
+                  className="w-44 "
+                  src="./../images/basket/notF.png"
+                  alt=""
+                />
+                <span>سبد خرید شما خالی میباشد</span>
+              </div>
+            )}
+            {/* {localStorageData.length
+              ? localStorageData.map((foods) => (
+                  <BoxUserBasketForLocalStorage
+                    setArrayUserBasket={setArrayUserBasket}
+                    localStorageData={localStorageData}
+                    foods={foods}
+                  />
+                ))
+              : null}
             {arrayUserBasket?.length ? (
               arrayUserBasket?.map((item) => (
                 <BoxUserBasket
@@ -70,11 +158,11 @@ export default function UserBasket({
                 />
                 <span>سبد خرید شما خالی میباشد</span>
               </div>
-            )}
+            )} */}
           </div>
         </div>
         <div className="flex items-center gap-5 flex-col">
-          {arrayUserBasket?.length ? (
+          {arrayUserBasket?.length || localStorageData.length ? (
             <>
               <div className="flex gap-6">
                 <div className="flex gap-1 items-center">
@@ -84,8 +172,11 @@ export default function UserBasket({
                   <span className="text-sm">مجموع هزینه:</span>
                 </div>
                 <div className="flex text-sm items-center gap-1">
-                  <span>{fainalyAllPriceFoods.toLocaleString()}</span>
-                  <span>میلیون تومان</span>
+                  <span>
+                    {fainalyAllPriceFoods ||
+                      dataPriceLocalStorage.toLocaleString()}
+                  </span>
+                  <span> تومان</span>
                 </div>
               </div>
               <button className="cursor-pointer bg-[#2EC4B6] text-white flex gap-1 w-full items-center justify-center p-3 rounded-xl">

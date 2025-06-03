@@ -13,8 +13,8 @@ import CityNameFreeSee from "../../Components/CityNameFreeSee/CityNameFreeSee.js
 import { CartProvider } from "../../Components/Context/Context.jsx";
 
 export default function Home() {  
-  const [arrayUserBasket , setArrayUserBasket] = useState([])
-
+  
+  
   // const baseUrl = import.meta.env.VITE_BASE_URL;
   const [city, setCity] = useState("");
   const [titleSearch, setTitleSearch] = useState("");
@@ -53,10 +53,10 @@ export default function Home() {
     
     <div className="dark:bg-zinc-600 relative">
       {/* <UserBasket/> */}
-      <Header city={city} />
+      <Header  city={city} />
       <div className="container-custom">
         <PapularCategury />
-        <AroundMe arrayUserBasket={arrayUserBasket} setArrayUserBasket={setArrayUserBasket}  />
+        <AroundMe />
         <NewFoods />
       </div>
       <FooterPc />

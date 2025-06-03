@@ -13,6 +13,7 @@ export default function Topbar({
   CalculatorUserBasket,
 }) {
   const loaderIconBasket = useRef(null);
+  
 
   const [isShowModalLogin, setIsShowModalLogin] = useState(false);
   const [isShowUserBasket, setIsShowUserBasket] = useState(false);
@@ -67,18 +68,18 @@ export default function Topbar({
   // ==================================================================
   // const loaderAddToBasket = useRef(null);
   const [isShowLoaderAddToBasket, setIsShowLoaderAddToBasket] = useState(false);
+  const [dataLocalStorage , setDataLocalStorage] = useState({})
 
-  // useEffect(() => {
-  //   if (arrayUserBasket.length++ || arrayUserBasket.length--) {
-  //     // setIsShowLoaderAddToBasket(true);
-  //     console.log(arrayUserBasket); 
-      
 
-  //     setTimeout(() => {
-  //       // setIsShowLoaderAddToBasket(false);
-  //     }, 1000);
-  //   }
-  // }, [arrayUserBasket]);
+  useEffect(() => {
+    const storedByLocalStorage = JSON.parse(localStorage.getItem("basket")) || []
+    console.log(storedByLocalStorage);
+    if(storedByLocalStorage.length){
+      setDataLocalStorage(storedByLocalStorage)
+    }
+
+    
+  },[])
 
   return (
     <>
@@ -86,7 +87,7 @@ export default function Topbar({
       <div
         className={`${
           isFixedTopBar
-            ? "fixed top-0 z-30 w-full transition-all bg-slate-700 text-white"
+            ? "fixed top-0 z-30 w-full transition-all bg-slate-700 "
             : ""
         } py-2`}
       >
@@ -95,10 +96,10 @@ export default function Topbar({
             {isUserLogin ? (
               <div
                 onClick={() => navUserInfos()}
-                className="flex gap-1 cursor-pointer"
+                className={`${isFixedTopBar ? "text-white" : "text-zinc-800"} items-cemter justify-center flex gap-1 text-white cursor-pointer`}
               >
                 <span className="text-xs">مبین محمدی</span>
-                <svg className="w-4 h-4 xs:w-5 xs:h-5 xs:pt-1">
+                <svg className={`w-3 h-3  xs:w-5 xs:h-5 pb-1`}>
                   <use href="#chevron-left"></use>
                 </svg>
               </div>
@@ -201,7 +202,7 @@ export default function Topbar({
               )}
               {/* <span className="Loader-Basket absolute -right-1 shadow-2xl -top-1"></span> */}
               <div className="cursor-pointer relative">
-                <div className="">
+                <div className={`${isFixedTopBar ? "text-white" : "text-zinc-700"}  `}>
                   <svg className="w-6 h-6 sm:w-8 sm:h-8">
                     <use href="#shopping-cart"></use>
                   </svg>
@@ -258,6 +259,7 @@ export default function Topbar({
             </div>
           </div>
         </div>
+        
 
         <UserBasket
           CalculatorUserBasket={CalculatorUserBasket}
