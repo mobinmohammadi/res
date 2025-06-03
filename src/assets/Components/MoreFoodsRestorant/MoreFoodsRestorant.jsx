@@ -6,7 +6,7 @@ export default function MoreFoodsRestorant({ title, price, img }) {
     <>
 
       <div>
-        <span className="text-xl text-zinc-700 font-bold">پیتزا آمریکایی</span>
+        <span className="text-xl text-zinc-700 font-bold">پیتزا آمریdکایی</span>
         <MoreFoodsBoxes/>
       </div>
     </>
